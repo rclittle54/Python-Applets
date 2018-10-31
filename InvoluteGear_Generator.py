@@ -10,8 +10,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-
-
 # This function exports a dataset D to the filename fname.
 def exportD(D,fname):
     try:
@@ -31,8 +29,6 @@ def exportD(D,fname):
     return
  
     
-
-
 # This function, primarily for debugging, plots a circle, centered at the origin, of radius r.
 def plotcircle(r,plotargs=''):
     c_r = r
@@ -47,22 +43,27 @@ def plotcircle(r,plotargs=''):
     plt.plot(cx,cy,plotargs)
     plt.hold
     
+    
 # This function returns the radial distance from the origin of point p.
 def radius(p):
     return np.sqrt(p[0]**2 + p[1]**2)
 
-# This function returns the angle, measured counterclockwise from the +x-axis of point p.
+
+# This function returns the angle of the line from the origin to point p, measured from
+# the positive x-axis.
 def angle_rad(p):
     return np.arctan(p[1]/p[0])
 
-# This function returns true if the point p has a greater angle than the given theta.
+
+# This function returns True if the point has an angle greater than theta.
 def point_outside_theta(p,theta):
     if np.abs(angle_rad(p)) > np.abs(theta): 
         return True
     else:
         return False
 
-# This function returns the angle span that the dataset D covers.
+
+# This function returns the angle span swept by the dataset.
 def segment_anglespan(D):
     return np.abs(angle_rad(D[0])-angle_rad(D[-1]))
 
@@ -74,15 +75,7 @@ def lindist(p1,p2):
     return np.sqrt((x2-x1)**2 + (y2-y1)**2)
 
 
-
-
-
-
-
-
-
-
-# This function returns the index of the list X, with the value closest to V.
+# This function returns the index of the list X that has a value closest to V.
 def I_Closest_To_Value(X,V):
     mins = []
     for x in X:
@@ -92,9 +85,7 @@ def I_Closest_To_Value(X,V):
     return m_i
     
 
-
-
-# This function returns the intersection of D and a circle of radius R
+# This function returns the intersection of D and a circle of radius R.
 def D_Intersect_At_R(D,R):
     point_radii = [radius(p) for p in D]
     min_d_index = I_Closest_To_Value(point_radii,R)
@@ -119,16 +110,6 @@ def D_Intersect_At_R(D,R):
     return [x_out,y_out]
 
 
-
-
-
-
-
-
-
-
-    
-
 # This function mirrors the point p about the line drawn at angle theta from the origin.
 def mirror_point(p,theta):
     #m = np.tan(np.deg2rad(theta))
@@ -151,13 +132,8 @@ def rotate_point(p,dtheta):
     nx,ny = r*np.cos(nt), r*np.sin(nt)
     return ((nx,ny))
     
-    
-    
 
-
-
-
-# Creates an involute curve between r0 and rf, at an angle offset a0.
+# Creates an involute curve between r0 and rf, at an angle offset a0
 def involute_segment(r0,rf,a0,orientation='ccw'):
     dt = 0.03
     DATA = []
@@ -182,7 +158,6 @@ def involute_segment(r0,rf,a0,orientation='ccw'):
         t += dt
         
     return DATA
-
 
 
 # This function returns the dataset for a fillet segment.
@@ -219,8 +194,6 @@ def fillet_segment(Rb,Rd,a0,direction='cw',startin=True):
     return DATA
     
 
-
-
 # This function returns the dataset for a circumferential segment.
 def circumfrence_segment(r,t0,tf,direction='ccw'):
     T = np.linspace(t0,tf,10)
@@ -237,7 +210,7 @@ def circumfrence_segment(r,t0,tf,direction='ccw'):
 
 
 # This function checks the distances between points for every point in dataset D.
-# If any distance is 0, it will let the user know, and possibly plot it according to DOPLOT.
+# If any distance == 0, it will let the user know, and possibly plot it according to DOPLOT.
 def Analyze_Distances(D,DOPLOT):
     dists = []
     for d in D[:-1]:
@@ -342,7 +315,7 @@ def Gear(N,P,alpha):
     # Outer circumfrential segment:
     co_theta0 = 0 - co_anglespan # It will be ending at the 0 radian line
     co = circumfrence_segment(Ra,co_theta0,0)
-    co = co[4:] # Excluding the first 2 elements of D to smooth out the tooth.
+    co = co[2:] # Excluding the first 2 elements of D to smooth out the tooth.
     
     
     
@@ -379,14 +352,8 @@ def plotD(D,plotargs=''):
     plt.plot(x,y,plotargs)
     plt.grid()
     
-
-
-
-
-
-
-
-# This function serves to get a yes or no response.
+    
+# This function gets a yes or no input from the user.
 def GetYesOrNo(prompt):
     resp = str(input(prompt))
     while resp not in ['y','n']:
@@ -396,19 +363,43 @@ def GetYesOrNo(prompt):
     return resp
 
 
-
-
-
 # This is the main execution function.
 def main():
-
+    
+    
     cont = 'y'
     
     while cont != 'n':
     
         N = input("# Teeth: ")
-        P = input("Pitch: ")
+        try:
+            N = int(N)
+        except ValueError:
+            print("ERROR: Invalid value for # teeth.")
+            continue
+        
+        
+                  
+        use_pitch_diameter = GetYesOrNo("Use the pitch diameter? y/n: ")
+        if use_pitch_diameter == 'y':
+            PD = input("Pitch diameter: ")
+            try:
+                PD = float(PD)
+                P = N/PD
+            except ValueError:
+                print("ERROR: Invalid value for pitch diameter.")
+                continue
+        else:
+            P = input("Pitch: ")
+            try:
+                P = float(P)
+            except ValueError:
+                print("ERROR: Invalid value for pitch.")
+                  
+        #P = input("Pitch: ")
         alpha = input("Pressure angle: ")
+        
+        
         
         try:
             N = int(N)
@@ -417,10 +408,17 @@ def main():
         except ValueError:
             print("ERROR: Invalid value for one or more parameters.")
             continue
-        D = Gear(N,P,alpha)
-        plt.figure(figsize=(6,6))
-        plotD(D)
         
+        D = Gear(N,P,alpha)
+        
+        """
+        do_plot = GetYesOrNo("Plot the gear? y/n: ")
+        if do_plot == 'y':
+            plt.figure(figsize=(6,6))
+            plotD(D)
+        """ 
+            
+        print("> Pitch diameter = %f"%(N/P))
         
         doexport = GetYesOrNo("Export to file? y/n: ")
         if doexport == 'y':
@@ -431,9 +429,7 @@ def main():
             
         cont = GetYesOrNo("Run again? y/n: ")
         
-
     return
-
 
 
 if __name__ == '__main__':
