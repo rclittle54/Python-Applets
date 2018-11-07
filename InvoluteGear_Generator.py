@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Oct 12 19:16:07 2018
-
 This program exports the points that define the profile for an involute spur gear.
-
 @author: ryanlittle
 """
 import matplotlib.pyplot as plt
@@ -135,7 +133,7 @@ def rotate_point(p,dtheta):
 
 # Creates an involute curve between r0 and rf, at an angle offset a0
 def involute_segment(r0,rf,a0,orientation='ccw'):
-    dt = 0.03
+    dt = 0.01
     DATA = []
     t = 0
     delta = -1
@@ -315,7 +313,8 @@ def Gear(N,P,alpha):
     # Outer circumfrential segment:
     co_theta0 = 0 - co_anglespan # It will be ending at the 0 radian line
     co = circumfrence_segment(Ra,co_theta0,0)
-    co = co[2:] # Excluding the first 2 elements of D to smooth out the tooth.
+    N_EXCLUDE = 2
+    co = co[N_EXCLUDE:] # Excluding the first N elements of D to smooth out the tooth.
     
     
     
@@ -411,12 +410,12 @@ def main():
         
         D = Gear(N,P,alpha)
         
-        """
+        
         do_plot = GetYesOrNo("Plot the gear? y/n: ")
         if do_plot == 'y':
             plt.figure(figsize=(6,6))
             plotD(D)
-        """ 
+            plt.show()
             
         print("> Pitch diameter = %f"%(N/P))
         
@@ -434,26 +433,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
