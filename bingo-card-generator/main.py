@@ -72,6 +72,8 @@ def saveBoardToCSV(outFname: str, board: np.ndarray) -> None:
     """Saves the `board` to `outFname`"""
     if os.path.isdir(os.path.dirname(outFname)):
         np.savetxt(outFname, board, fmt="%s", delimiter=',')
+    else:
+        print("Error: Directory of provided outFname '{0}' does not exist".format(outFname))
     return
 
 
