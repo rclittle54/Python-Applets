@@ -3,8 +3,38 @@
 # Imports
 import numpy as np
 import os
+import argparse
 
+# Constants
 _EXPECTEDVALS = 24
+
+# Default arguments
+INPUTFILENAME = "bingo-card-generator/exampleInput.txt"
+OUTPUTFILENAME = "bingo-card-generator/exampleOutput.txt"
+NUMREPEATS = 1
+
+
+def parseArgs():
+    """Parses the arguments provided by the command line"""
+    parser = argparse.ArgumentParser()
+    parser.add_argument("inputFile", help="Input .txt file, containing 24 lines of the various elements for the Bingo board")
+    parser.add_argument("outputFile", help="Output .csv file, into which the Bingo board will be stored")
+    parser.add_argument("numRepeats", help="The integer number of unique boards to generate")
+    args = parser.parse_args()
+    if args.inputFile:
+        if not os.path.isfile(args.inputFile):
+            print("Warning: input file of {0} not found".format(args.inputFile))
+        INPUTFILENAME = args.inputFile
+    if args.outputFile:
+        if not os.path.splitext(args.outputFile)[1].lower() == ".csv":
+            print("Warning: output file of {0} is not a .csv".format(args.outputFile))
+        OUTPUTFILENAME = args.outputFile
+    if args.numRepeats:
+        if type(args.numRepeats) is not int:
+            print("Warning: numRepeats value of '{0}' is not an integer".format(args.numRepeats))
+        NUMREPEATS = args.numRepeats
+    return
+
 
 def parseTextFileInput(textFile: str) -> list:
     """Return a list of text elements from the provided text file"""
