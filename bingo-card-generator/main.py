@@ -4,6 +4,9 @@
 import numpy as np
 import os
 import argparse
+import time
+import random
+random.seed(time.time())
 
 # Constants
 _EXPECTEDVALS = 24
@@ -11,7 +14,7 @@ _EXPECTEDVALS = 24
 # Default arguments
 INPUTFILENAME = "bingo-card-generator/exampleInput.txt"
 OUTPUTFILENAME = "bingo-card-generator/exampleOutput.txt"
-NUMREPEATS = 1
+NUMREPEATS = 2
 
 
 def parseArgs():
@@ -68,16 +71,13 @@ def convertListToBingoArray(inputList: list) -> np.array:
 def main():
     """Bingo Card Generator main function"""
     parseArgs() # Sets global variables
-    boardItems = parseTextFileInput(INPUTFILENAME)
     for i in range(NUMREPEATS):
+        boardItems = parseTextFileInput(INPUTFILENAME)
+        random.shuffle(boardItems)
         board = convertListToBingoArray(boardItems)
         realFilename = "{0}-{1}.csv".format(os.path.splitext(OUTPUTFILENAME)[0], i)
         np.savetxt(realFilename, board, fmt="%s", delimiter=',')
 
-    # print("Hello world")
-    # usrInput = parseTextFileInput("bingo-card-generator/exampleInput.txt")
-    # arr = convertListToBingoArray(usrInput)
-    # np.savetxt("bingo-card-generator/testOut.csv", arr, fmt="%s", delimiter=',')
     return
 
 
