@@ -17,9 +17,9 @@ NUMREPEATS = 1
 def parseArgs():
     """Parses the arguments provided by the command line"""
     parser = argparse.ArgumentParser()
-    parser.add_argument("inputFile", help="Input .txt file, containing 24 lines of the various elements for the Bingo board")
-    parser.add_argument("outputFile", help="Output .csv file, into which the Bingo board will be stored")
-    parser.add_argument("numRepeats", help="The integer number of unique boards to generate")
+    parser.add_argument("--inputFile", help="Input .txt file, containing 24 lines of the various elements for the Bingo board")
+    parser.add_argument("--outputFile", help="Output .csv file, into which the Bingo board will be stored")
+    parser.add_argument("--numRepeats", help="The integer number of unique boards to generate")
     args = parser.parse_args()
     if args.inputFile:
         if not os.path.isfile(args.inputFile):
@@ -67,10 +67,17 @@ def convertListToBingoArray(inputList: list) -> np.array:
 
 def main():
     """Bingo Card Generator main function"""
-    print("Hello world")
-    usrInput = parseTextFileInput("bingo-card-generator/exampleInput.txt")
-    arr = convertListToBingoArray(usrInput)
-    np.savetxt("bingo-card-generator/testOut.csv", arr, fmt="%s", delimiter=',')
+    parseArgs() # Sets global variables
+    boardItems = parseTextFileInput(INPUTFILENAME)
+    for i in range(NUMREPEATS):
+        board = convertListToBingoArray(boardItems)
+        realFilename = "{0}-{1}.csv".format(os.path.splitext(OUTPUTFILENAME)[0], i)
+        np.savetxt(realFilename, board, fmt="%s", delimiter=',')
+
+    # print("Hello world")
+    # usrInput = parseTextFileInput("bingo-card-generator/exampleInput.txt")
+    # arr = convertListToBingoArray(usrInput)
+    # np.savetxt("bingo-card-generator/testOut.csv", arr, fmt="%s", delimiter=',')
     return
 
 
