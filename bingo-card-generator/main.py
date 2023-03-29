@@ -40,7 +40,7 @@ def main():
     print("Hello world")
     usrInput = parseTextFileInput("bingo-card-generator/exampleInput.txt")
     arr = convertListToBingoArray(usrInput)
-    print(arr)
+    np.savetxt("bingo-card-generator/testOut.csv", arr, fmt="%s", delimiter=',')
     return
 
 
