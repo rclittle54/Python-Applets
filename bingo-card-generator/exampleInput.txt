@@ -2,10 +2,10 @@ Lorem
 ipsum
 dolor
 sit
-amet,
+amet
 consectetur
 adipiscing
-elit,
+elit
 sed
 do
 eiusmod
@@ -20,5 +20,5 @@ aliqua
 Ut
 enim
 ad
-minim 
-veniam,
+minim
+veniam
