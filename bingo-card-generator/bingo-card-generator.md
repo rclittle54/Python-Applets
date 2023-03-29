@@ -13,5 +13,5 @@ Example input:
 From the command line, call:
 
 ```cmd
-python bingo-card-generator/main.py --inputFile bingo-card-generator/exampleInput.txt --outputFile bingo-card-generator/output/exampleOutput.txt --numRepeats 15
+python bingo-card-generator/main.py --inputFile bingo-card-generator/exampleInput.txt --outputFile bingo-card-generator/output/exampleOutput.csv --numRepeats 15
 ```
