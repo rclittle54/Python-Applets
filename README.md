@@ -1,5 +1,13 @@
 # Python-Applets
 
+This repo contains various one-off Python scripts I've created over the years.
+
+## Bingo Card Generator
+
+This program should take a `.txt` file containing exactly 24 lines in it, and generate a Pandas dataframe containing the 24 line elements, randomly ordered, as if on a Bingo table.
+
+***
+
 ## Unsorted
 * GameOfLife - Conway's Game of Life, using Python.
 * DotBible - An algorithm helping marching bands understand their physical positioning on the field between charts. 
