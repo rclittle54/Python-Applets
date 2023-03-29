@@ -19,6 +19,10 @@ NUMREPEATS = 15
 
 def parseArgs() -> None:
     """Parses the arguments provided by the command line"""
+    global INPUTFILENAME
+    global OUTPUTFILENAME
+    global NUMREPEATS
+    
     parser = argparse.ArgumentParser()
     parser.add_argument("--inputFile", help="Input .txt file, containing 24 lines of the various elements for the Bingo board")
     parser.add_argument("--outputFile", help="Output .csv file, into which the Bingo board will be stored")
