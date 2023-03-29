@@ -13,7 +13,7 @@ _EXPECTEDVALS = 24
 
 # Default arguments
 INPUTFILENAME = "bingo-card-generator/exampleInput.txt"
-OUTPUTFILENAME = "bingo-card-generator/output/exampleOutput.txt"
+OUTPUTFILENAME = "bingo-card-generator/output/exampleOutput.csv"
 NUMREPEATS = 15
 
 
@@ -33,9 +33,11 @@ def parseArgs() -> None:
             print("Warning: output file of {0} is not a .csv".format(args.outputFile))
         OUTPUTFILENAME = args.outputFile
     if args.numRepeats:
-        if type(args.numRepeats) is not int:
+        try:
+            numR = int(args.numRepeats)
+            NUMREPEATS = numR
+        except ValueError:
             print("Warning: numRepeats value of '{0}' is not an integer".format(args.numRepeats))
-        NUMREPEATS = args.numRepeats
     return
 
 
