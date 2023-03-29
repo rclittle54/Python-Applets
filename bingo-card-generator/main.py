@@ -13,11 +13,11 @@ _EXPECTEDVALS = 24
 
 # Default arguments
 INPUTFILENAME = "bingo-card-generator/exampleInput.txt"
-OUTPUTFILENAME = "bingo-card-generator/exampleOutput.txt"
-NUMREPEATS = 2
+OUTPUTFILENAME = "bingo-card-generator/output/exampleOutput.txt"
+NUMREPEATS = 15
 
 
-def parseArgs():
+def parseArgs() -> None:
     """Parses the arguments provided by the command line"""
     parser = argparse.ArgumentParser()
     parser.add_argument("--inputFile", help="Input .txt file, containing 24 lines of the various elements for the Bingo board")
@@ -58,7 +58,7 @@ def parseTextFileInput(textFile: str) -> list:
     return output
 
 
-def convertListToBingoArray(inputList: list) -> np.array:
+def convertListToBingoArray(inputList: list) -> np.ndarray:
     """Returns a dataframe in the form of a bingo card from the input list."""
     # Pre-check the provided list
     assert len(inputList) == 24, "Provided list is not of the proper length, 24 elements."
@@ -66,6 +66,13 @@ def convertListToBingoArray(inputList: list) -> np.array:
     arr = np.array(inputList)
     arr = np.reshape(arr, (5,5))
     return arr
+
+
+def saveBoardToCSV(outFname: str, board: np.ndarray) -> None:
+    """Saves the `board` to `outFname`"""
+    if os.path.isdir(os.path.dirname(outFname)):
+        np.savetxt(outFname, board, fmt="%s", delimiter=',')
+    return
 
 
 def main():
@@ -76,7 +83,7 @@ def main():
         random.shuffle(boardItems)
         board = convertListToBingoArray(boardItems)
         realFilename = "{0}-{1}.csv".format(os.path.splitext(OUTPUTFILENAME)[0], i)
-        np.savetxt(realFilename, board, fmt="%s", delimiter=',')
+        saveBoardToCSV(realFilename, board)
 
     return
 
