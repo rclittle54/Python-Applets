@@ -58,6 +58,17 @@ def parseTextFileInput(textFile: str) -> list:
     return output
 
 
+def sanitizeInput(inputList: list) -> list:
+    """Performs the actions needed to sanitize the input"""
+    output = []
+    for i in range(len(inputList)):
+        item = inputList[i]
+        item = item.replace('\n', '') # No newlines
+        item = item.replace(',', '')  # No commas, since this goes to a csv
+        output.append(item)
+    return output
+
+
 def convertListToBingoArray(inputList: list) -> np.ndarray:
     """Returns a dataframe in the form of a bingo card from the input list."""
     # Pre-check the provided list
@@ -82,6 +93,7 @@ def main():
     parseArgs() # Sets global variables
     for i in range(NUMREPEATS):
         boardItems = parseTextFileInput(INPUTFILENAME)
+        boardItems = sanitizeInput(boardItems)
         random.shuffle(boardItems)
         board = convertListToBingoArray(boardItems)
         realFilename = "{0}-{1}.csv".format(os.path.splitext(OUTPUTFILENAME)[0], i)
