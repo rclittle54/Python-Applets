@@ -1,7 +1,7 @@
 """main.py: Main file for bingo-card-generator"""
 
 # Imports
-import pandas as pd
+import numpy as np
 import os
 
 _EXPECTEDVALS = 24
@@ -25,10 +25,22 @@ def parseTextFileInput(textFile: str) -> list:
     return output
 
 
+def convertListToBingoArray(inputList: list) -> np.array:
+    """Returns a dataframe in the form of a bingo card from the input list."""
+    # Pre-check the provided list
+    assert len(inputList) == 24, "Provided list is not of the proper length, 24 elements."
+    inputList.insert(12, "FREE") # Bingo has a "FREE" space in the middle
+    arr = np.array(inputList)
+    arr = np.reshape(arr, (5,5))
+    return arr
+
+
 def main():
     """Bingo Card Generator main function"""
     print("Hello world")
-    print(parseTextFileInput("bingo-card-generator/exampleInput.txt"))
+    usrInput = parseTextFileInput("bingo-card-generator/exampleInput.txt")
+    arr = convertListToBingoArray(usrInput)
+    print(arr)
     return
 
 
